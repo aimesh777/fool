@@ -24,7 +24,7 @@ function App() {
 	}
 
 	useEffect(() => {
-		if (document.readyState === 'complete') {
+		if (document.readyState !== 'loading') {
 			handleLoading()
 		} else {
 			window.addEventListener('DOMContentLoaded', handleLoading)
