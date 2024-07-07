@@ -20,7 +20,7 @@ const FlyingCard: FC<IProps> = ({
 	from,
 	to,
 	scale,
-	position = 'top',
+	position,
 	animation = false
 }) => {
 	const [visible, setVisible] = useState<string>('block')

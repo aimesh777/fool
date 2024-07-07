@@ -8,7 +8,7 @@ import avatar from '@/assets/tapps.png'
 import Card from './Card'
 
 interface IProps {
-	rivals: Array<IRival>
+	rivals: IRival[]
 }
 
 const Rivals: FC<IProps> = ({ rivals }) => {
