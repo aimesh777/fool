@@ -27,8 +27,8 @@ function App() {
 		if (document.readyState === 'complete') {
 			handleLoading()
 		} else {
-			window.addEventListener('load', handleLoading)
-			return () => window.removeEventListener('load', handleLoading)
+			window.addEventListener('DOMContentLoaded', handleLoading)
+			return () => window.removeEventListener('DOMContentLoaded', handleLoading)
 		}
 		tg.ready()
 	}, [])
