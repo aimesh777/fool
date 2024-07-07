@@ -24,12 +24,19 @@ function App() {
 	}
 
 	useEffect(() => {
-		if (document.readyState !== 'loading') {
+		if (
+			document.readyState === 'complete' ||
+			document.readyState === 'interactive'
+		) {
 			handleLoading()
 		} else {
-			window.addEventListener('DOMContentLoaded', handleLoading)
-			return () => window.removeEventListener('DOMContentLoaded', handleLoading)
+			const onContentLoaded = () => {
+				handleLoading()
+				window.removeEventListener('load', onContentLoaded)
+			}
+			window.addEventListener('load', onContentLoaded)
 		}
+
 		tg.ready()
 	}, [])
 
