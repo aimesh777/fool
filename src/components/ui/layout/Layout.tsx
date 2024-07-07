@@ -16,7 +16,7 @@ const Layout: FC<PropsWithChildren<ILayout>> = ({
 	footer
 }) => {
 	return (
-		<div className='flex flex-col justify-between items-center py-base-x4 mb-base-x4 overflow-auto px-[10%] h-full'>
+		<div className='flex flex-col justify-between items-center py-base-x4 mb-base-x4 gap-base-x2 overflow-auto px-[10%] min-h-full'>
 			<div className='flex flex-col items-center gap-base-x4 w-full h-full'>
 				{!noLogo && <Logo />}
 				{header && (
