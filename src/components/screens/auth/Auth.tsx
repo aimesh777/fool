@@ -20,7 +20,7 @@ const Auth: FC = () => {
 	}, [])
 
 	const onTelegramAuth = async user => {
-		navigate(0)
+		navigate('/menu')
 		await saveUser('user')
 		console.log(user.first_name, user.last_name, user.id, user.username)
 	}
