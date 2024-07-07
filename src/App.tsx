@@ -24,9 +24,13 @@ function App() {
 	}
 
 	useEffect(() => {
-		window.addEventListener('load', handleLoading)
+		if (document.readyState === 'complete') {
+			handleLoading()
+		} else {
+			window.addEventListener('load', handleLoading)
+			return () => window.removeEventListener('load', handleLoading)
+		}
 		tg.ready()
-		return () => window.removeEventListener('load', handleLoading)
 	}, [])
 
 	if (isLoading) return <Loading />
