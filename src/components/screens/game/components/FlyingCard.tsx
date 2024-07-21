@@ -44,8 +44,8 @@ const FlyingCard: FC<IProps> = ({
 				<div
 					className={
 						animation
-							? 'animate-[scalechange_0.75s_ease-in-out] w-[120px] h-[150px] rounded-[12px] bg-white text-[#000]'
-							: 'w-[120px] h-[150px] rounded-[12px] bg-white text-[#000]'
+							? 'scale-[90%] w-[110px] h-[140px] rounded-[12px] bg-white text-[#000]'
+							: 'w-[93px] h-[130px] rounded-[12px] bg-white text-[#000]'
 					}
 				>
 					<Card

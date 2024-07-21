@@ -9,14 +9,14 @@ const Subscription: FC = () => {
 		{
 			title: 'TON_Fool_chat',
 			href: 'https://www.google.ru/'
-		},
-		{ title: '<any_groupp>', href: '' }
+		}
 	]
+
 	return (
 		<Layout
 			header={{ icon: 'tg', title: 'Подписки' }}
 			footer={
-				<Button onClick={() => navigate(-1)} icon='back'>
+				<Button onClick={() => navigate('/menu')} icon='back'>
 					Назад
 				</Button>
 			}

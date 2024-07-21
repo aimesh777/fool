@@ -1,1 +1,1 @@
-export const API_URL = `https://site`
+export const API_URL = `https://api.tonfool.online`

@@ -12,7 +12,7 @@ import {
 	Subscription
 } from '@/components/screens'
 
-import { IRoute } from './navigation.types'
+import { IRoute } from '../navigation.types'
 
 export const userRoutes: IRoute[] = [
 	{

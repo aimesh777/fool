@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>player 1</title>
+</head>
+<script>
+    var game_ws = new WebSocket("ws://localhost:8000/ws/game/25f4d84e-8a6a-4514-a60e-c9366a7e3100/1");
+    game_ws.onmessage = function(event) {
+        console.log(event.data)
+    };
+    function playCard(event) {
+        let data = {}
+        data["action"] = "play_card"
+        data["card"] = "Q_of_diamonds"
+        game_ws.send(JSON.stringify(data))
+    }
+
+    function defenCard(event) {
+        let data = {}
+        data["action"] = "defend_card"
+        data["card"] = "Q_of_diamonds"
+        game_ws.send(JSON.stringify(data))
+    }
+
+    function ready(event) {
+        let data = {}
+        data["action"] = "ready"
+        game_ws.send(JSON.stringify(data))
+    }
+
+    function beat(event) {
+        let data = {}
+        data["action"] = "beat"
+        game_ws.send(JSON.stringify(data))
+    }
+</script>
+</html>

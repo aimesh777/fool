@@ -10,7 +10,7 @@ const Statistics: FC = () => {
 		<Layout
 			header={{ icon: 'statistics', title: 'Статистика' }}
 			footer={
-				<Button onClick={() => navigate(-1)} icon='back'>
+				<Button onClick={() => navigate('/menu')} icon='back'>
 					Назад
 				</Button>
 			}

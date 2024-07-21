@@ -3,7 +3,7 @@ import { FC } from 'react'
 
 import { Typography } from '@/components/ui'
 
-import { TTypeGame } from '@/shared/types'
+import { TTypeGame } from '@/shared/types/game.interface'
 
 interface IProps {
 	selectedType: TTypeGame
@@ -11,14 +11,15 @@ interface IProps {
 }
 
 const Type: FC<IProps> = ({ selectedType, setSelectedType }) => {
-	const types: { name: TTypeGame; title: string }[] = [
+	const types: { name: TTypeGame; title: string; soon?: boolean }[] = [
 		{
-			name: 'thrown-up',
+			name: 'flip_up',
 			title: 'Подкидной'
 		},
 		{
-			name: 'transferable',
-			title: 'Переводной'
+			name: 'translated',
+			title: 'Переводной',
+			soon: true
 		}
 	]
 
@@ -30,14 +31,26 @@ const Type: FC<IProps> = ({ selectedType, setSelectedType }) => {
 					<button
 						onClick={() => setSelectedType(item.name)}
 						key={item.name}
+						disabled={item.soon}
 						className={cn(
-							'flex gap-base-x2 items-center rounded-base-x1 py-base-x1 px-base-x3 w-full border border-white',
+							'flex gap-base-x2 items-center rounded-base-x1 relative py-base-x1 px-base-x3 w-full border border-white',
+							item.soon && 'border-opacity-40',
 							selectedType === item.name
 								? 'border-solid bg-radial-gradient bg-gradient'
 								: 'border-dashed'
 						)}
 					>
-						<Typography variant='text'>{item.title}</Typography>
+						{item.soon && (
+							<span className='text-yellow text-base-x3 font-bold absolute left-[50%] transform translate-x-[-50%] -rotate-[15deg]'>
+								soon
+							</span>
+						)}
+						<Typography
+							variant='text'
+							className={cn(item.soon && 'opacity-40')}
+						>
+							{item.title}
+						</Typography>
 					</button>
 				))}
 			</div>

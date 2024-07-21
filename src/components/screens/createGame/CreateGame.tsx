@@ -3,58 +3,86 @@ import { useNavigate } from 'react-router-dom'
 
 import { Button, Layout } from '@/components/ui'
 
-import { TCurrency, TTypeGame } from '@/shared/types'
+import { IPlayer } from '@/shared/types/auth.interface'
+import {
+	ICreateGameRequest,
+	TCurrency,
+	TTypeGame
+} from '@/shared/types/game.interface'
 
-import { Bet, Currency, ModalSelectRivals, Rivals, Type } from './components'
+import { useProfile } from '@/hooks'
+
+import { Bet, Currency, Rivals, Type } from './components'
+import { useCreateGame } from './useCreateGame'
 
 const CreateGame: FC = () => {
-	const [showModal, setShowModal] = useState(false)
-	const [selectedCurrency, setSelectedCurrency] = useState<TCurrency>('fool')
-	const [selectedBet, setSelectedBet] = useState(7)
-	const [selectedType, setSelectedType] = useState<TTypeGame>('thrown-up')
-	const [selectedRivals, setSelectedRivals] = useState(['0', '1'])
 	const navigate = useNavigate()
+	const { user } = useProfile()
+	const [info, setInfo] = useState<ICreateGameRequest>({
+		currency: 'foolcoin',
+		bet: 7,
+		num_players: 1,
+		game_type: 'flip_up'
+	})
+	const { createGame } = useCreateGame(info.bet, info.currency)
+	const [selectedRivals, setSelectedRivals] = useState<IPlayer[]>([])
+	const onSubmit = () => {
+		const updatedInfo = { ...info, num_players: info.num_players + 1 }
+		createGame(updatedInfo)
+	}
+
+	const updateInfo = <K extends keyof ICreateGameRequest>(
+		key: K,
+		value: ICreateGameRequest[K]
+	) => {
+		setInfo(prevInfo => ({
+			...prevInfo,
+			[key]: value
+		}))
+	}
 
 	return (
 		<Layout
 			header={{
-				icon: showModal ? 'swords' : 'fan',
-				title: showModal ? 'Соперники' : 'Новая игра'
+				icon: 'fan',
+				title: 'Новая игра'
 			}}
 			footer={
-				selectedRivals.length > 0 ? (
-					<div className='flex w-full gap-base-x2'>
-						<Button onClick={() => navigate('/game')}>Играть</Button>
-						<Button
-							onClick={() => navigate(-1)}
-							icon='back'
-							style={{ width: 63 }}
-						/>
-					</div>
-				) : (
-					<Button onClick={() => navigate(-1)}>Отмена</Button>
-				)
+				<div className='flex w-full gap-base-x2'>
+					<Button onClick={onSubmit}>Играть</Button>
+					<Button
+						onClick={() => navigate('/menu')}
+						icon='back'
+						style={{ width: 63 }}
+					/>
+				</div>
 			}
 			className='flex flex-col gap-base-x2'
 		>
 			<Currency
-				setSelectedCurrency={setSelectedCurrency}
-				selectedCurrency={selectedCurrency}
+				setSelectedCurrency={(value: TCurrency) =>
+					updateInfo('currency', value)
+				}
+				currency={user?.currency}
+				selectedCurrency={info.currency}
 			/>
 			<Bet
-				setSelectedBet={setSelectedBet}
-				selectedBet={selectedBet}
-				selectedCurrency={selectedCurrency}
+				setSelectedBet={(value: number) => updateInfo('bet', value)}
+				selectedBet={info.bet}
+				currentBalance={user?.currency[info.currency]}
+				selectedCurrency={info.currency}
 			/>
-			<Type selectedType={selectedType} setSelectedType={setSelectedType} />
+			<Type
+				selectedType={info.game_type}
+				setSelectedType={(value: TTypeGame) => updateInfo('game_type', value)}
+			/>
 			<Rivals
 				selectedRivals={selectedRivals}
+				selectedCountRivals={info.num_players}
 				setSelectedRivals={setSelectedRivals}
-				addRivals={() => setShowModal(true)}
-			/>
-			<ModalSelectRivals
-				isOpen={showModal}
-				handleClose={() => setShowModal(false)}
+				setSelectedCountRivals={(value: number) =>
+					updateInfo('num_players', value)
+				}
 			/>
 		</Layout>
 	)

@@ -1,9 +1,9 @@
-import { FC } from 'react'
+import { FC } from "react";
 
-import { Typography } from '@/components/ui'
+import { Typography } from "@/components/ui";
 
-import QD from '@/assets/cards/QD.svg'
-import cover from '@/assets/cards/cover.svg'
+import QD from "@/assets/cards/QD.svg";
+import cover from "@/assets/cards/cover.svg";
 
 const Pack: FC = () => {
 	return (

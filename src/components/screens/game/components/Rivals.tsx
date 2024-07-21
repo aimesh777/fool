@@ -1,29 +1,30 @@
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 
 import { IRival } from '@/components/screens/game/game.interface'
-import { Typography } from '@/components/ui'
+import { Icon, Typography } from '@/components/ui'
+
+import { getGame } from '@/services/game/game.helper'
 
 import avatar from '@/assets/tapps.png'
 
-import Card from './Card'
-
 interface IProps {
 	rivals: IRival[]
+	handlerShowModal: (place: number) => void
 }
 
-const Rivals: FC<IProps> = ({ rivals }) => {
-	const [rivalCards, setRivalCards] = useState([])
-
+const Rivals: FC<IProps> = ({ rivals, handlerShowModal }) => {
+	const game = getGame()
+	const countRivals = Array(game.num_players - 1).fill(1)
+	/*
 	useEffect(() => {
-		const maxRivalCardsAngleDegrees = 30
-		const newRivalCards = []
+		const newRivalCardsDOM = []
 
 		rivals.forEach((rival, rivalIndex) => {
-			newRivalCards.push([])
+			newRivalCardsDOM.push([])
 
 			if (rival.numberOfCards > 1) {
 				for (let i = 0; i < rival.numberOfCards; i++) {
-					newRivalCards[rivalIndex].push(
+					newRivalCardsDOM[rivalIndex].push(
 						<Card
 							size='small'
 							position='bottom'
@@ -40,7 +41,7 @@ const Rivals: FC<IProps> = ({ rivals }) => {
 					)
 				}
 			} else if (rival.numberOfCards > 0) {
-				newRivalCards[rivalIndex].push(
+				newRivalCardsDOM[rivalIndex].push(
 					<Card
 						size='small'
 						position='bottom'
@@ -51,11 +52,21 @@ const Rivals: FC<IProps> = ({ rivals }) => {
 			}
 		})
 
-		setRivalCards(newRivalCards)
+		setRivalCardsDOM(newRivalCardsDOM)
 	}, [rivals])
+*/
 
 	return (
 		<div className='flex justify-between w-full'>
+			{countRivals.map((item, index) => (
+				<button
+					key={index}
+					onClick={() => handlerShowModal(item + 1)}
+					className='w-base-x7 h-base-x7 rounded-base-x1 border border-dashed flex items-center justify-center'
+				>
+					<Icon size={24} icon='plus' color='white' />
+				</button>
+			))}
 			{rivals.map((rival, rivalIndex) => (
 				<div
 					className='flex flex-col items-center gap-base-x1 relative'
@@ -73,7 +84,7 @@ const Rivals: FC<IProps> = ({ rivals }) => {
 						id={'Cards' + rivalIndex}
 						className='w-full absolute top-[50px] left-[20px] z-20'
 					>
-						{rivalCards[rivalIndex]?.length > 0 && rivalCards[rivalIndex]}
+						{/*{rivalCardsDOM[rivalIndex]?.length > 0 && rivalCardsDOM[rivalIndex]}*/}
 					</div>
 				</div>
 			))}

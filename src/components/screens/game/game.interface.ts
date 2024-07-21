@@ -9,8 +9,19 @@ export interface ITypeCard {
 }
 
 export interface IRival {
-	name: string
-	numberOfCards: number
+	tg_id?: number
+	username?: string
+	avatar?: string
+
+	name?: string
+	numberOfCards?: number
+}
+
+export interface IAddRivalProps {
+	global_ws: WebSocket
+	tg_id: number
+	place: number
+	game_id: string
 }
 
 export const cardSizeToDimensions = {

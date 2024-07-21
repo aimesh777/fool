@@ -8,6 +8,7 @@ import {
 	cardSizeToDimensions
 } from '@/components/screens/game/game.interface'
 
+import QC from '@/assets/cards/QC.svg'
 import cover from '@/assets/cards/cover.svg'
 
 interface IProps {
@@ -22,8 +23,7 @@ const Card: FC<IProps> = ({
 	style,
 	className,
 	size = 'normal',
-	position = 'top',
-	type
+	position = 'top'
 }) => {
 	return (
 		<div
@@ -31,19 +31,20 @@ const Card: FC<IProps> = ({
 			style={{ ...style, borderRadius: cardSizeToDimensions[size].radius }}
 		>
 			<div
-				className='bg-white bg-contain bg-center'
+				className='bg-white bg-cover bg-center'
 				style={{
 					width: cardSizeToDimensions[size].width,
 					height: cardSizeToDimensions[size].height,
-					backgroundImage: position === 'bottom' && `url(${cover})`
+					backgroundImage:
+						position === 'bottom' ? `url(${cover})` : `url(${QC})`
 				}}
 			>
-				{position === 'top' && (
+				{/*{position === 'top' && (
 					<div>
 						suit: {type?.suit} <br />
 						value: {type?.value}
 					</div>
-				)}
+				)}*/}
 			</div>
 		</div>
 	)

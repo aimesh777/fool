@@ -1,41 +1,45 @@
 import { FC } from 'react'
 
-import { Icon, Typography } from '@/components/ui'
+import { Icon, Loader, Typography } from '@/components/ui'
+
+import { IPlayer } from '@/shared/types/auth.interface'
 
 import avatar from '@/assets/tapps.png'
 
-const Profile: FC = () => {
-	const currency = [
-		{ icon: 'fool', count: '128' },
-		{ icon: 'ton', count: '64' },
-		{ icon: 'not', count: '32 768' }
-	]
+interface IProps {
+	user: IPlayer
+	isLoading: boolean
+}
+
+const Profile: FC<IProps> = ({ user, isLoading }) => {
+	if (isLoading) return <Loader />
 
 	return (
 		<div className='flex gap-base-x3'>
 			<img
-				src={avatar}
+				src={user.photo_url ? user.photo_url : avatar}
 				alt=''
 				className='w-base-x7 h-base-x7 rounded-base-x1'
 			/>
 			<div className='flex flex-col justify-between w-full'>
 				<div className='flex flex-col'>
-					<Typography variant='text'>tg_username</Typography>
+					<Typography variant='text'>{user.username}</Typography>
 					<div className='flex gap-base-x3 items-center'>
-						<Typography variant='text'>ID: dFj39S2k</Typography>
+						<Typography variant='text'>ID: {user.tg_id}</Typography>
 						<div className='flex items-center gap-base-x1'>
 							<Typography variant='text'>🏆</Typography>
-							<Typography variant='text'>7523</Typography>
+							<Typography variant='text'>{user.cups}</Typography>
 						</div>
 					</div>
 				</div>
 				<div className='flex items-center justify-between'>
-					{currency.map(item => (
-						<div key={item.icon} className='flex gap-base-x1 items-center'>
-							<Icon size={18} icon={item.icon} />
-							<Typography variant='text'>{item.count}</Typography>
-						</div>
-					))}
+					{user.currency &&
+						Object.entries(user.currency).map(item => (
+							<div key={item[0]} className='flex gap-base-x1 items-center'>
+								<Icon size={18} icon={item[0]} />
+								<Typography variant='text'>{item[1]}</Typography>
+							</div>
+						))}
 				</div>
 			</div>
 		</div>

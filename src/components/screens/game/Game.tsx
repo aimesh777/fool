@@ -1,25 +1,102 @@
 import { DragDropContext } from '@hello-pangea/dnd'
 import { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import { FlyingCard } from '@/components/screens/game/components'
-import { Layout } from '@/components/ui'
+import { Button, Icon, Layout, Modal, Typography } from '@/components/ui'
 
-import { Fall, Fan, Pack, Rivals, Table } from './components'
+import { getId } from '@/services/auth/auth.helper'
+import { getGame } from '@/services/game/game.helper'
+
+import avatar from '@/assets/tapps.png'
+
+import { getWebSocket } from '@/websocket'
+
+import { Fall, Fan, FlyingCard, Pack, Rivals, Table } from './components'
 import { IRival, ITypeCard, TPositionCard } from './game.interface'
+import { addRival } from './game.utils'
+import { useGame } from './useGame'
 
 const Game: FC = () => {
+	const navigate = useNavigate()
+	const game = getGame()
+	const tg_id = getId()
+	const { rivals } = useGame()
+	const [players, setPlayers] = useState<IRival[]>([])
 	const [cardsOnTable, setCardsOnTable] = useState<ITypeCard[][]>([[]])
-	const rivalsInfo: IRival[] = [
-		{ name: '<username1>', numberOfCards: 0 },
-		{ name: '<username2>', numberOfCards: 0 },
-		{ name: '<username3>', numberOfCards: 0 }
-	]
-
 	const [myCards, setMyCards] = useState<ITypeCard[]>([])
+	const [placeRival, setPlaceRival] = useState<number>()
 
 	// Карты анимации
 	const [currentFlyingCards, setCurrentFlyingCards] = useState<ReactNode[]>([])
 	const flyingCardsRef = useRef<HTMLDivElement>(null)
+
+	const [rivalsInfo, setRivalsInfo] = useState<IRival[]>([
+		{ name: '<username1>', numberOfCards: 0 },
+		{ name: '<username2>', numberOfCards: 0 },
+		{ name: '<username3>', numberOfCards: 0 }
+	])
+	const [showModal, setShowModal] = useState(false)
+
+	useEffect(() => {
+		if (!game.id) navigate('/create-game')
+	}, [])
+
+	const global_ws = getWebSocket()
+	let game_ws = new WebSocket(
+		`wss://api.tonfool.online/ws/game/${game.id}/${tg_id}/1`
+	)
+
+	game_ws.onerror = error => {
+		console.error('WebSocket error:', error)
+		game_ws = new WebSocket(
+			`wss://api.tonfool.online/ws/game/${game.id}/${tg_id}/1`
+		)
+	}
+
+	useEffect(() => {
+		game_ws.onmessage = function (event) {
+			const data = JSON.parse(event.data)
+
+			switch (data.action) {
+				case 'connect': {
+					console.log('connect', data)
+
+					if (JSON.stringify(data.players) !== JSON.stringify(players)) {
+						setPlayers(data.players)
+					}
+					break
+				}
+				case 'disconnect': {
+					console.log('disconnect', data)
+
+					break
+				}
+				case 'ready': {
+					console.log('ready', data)
+					break
+				}
+				case 'start': {
+					// карты игрока
+					// когда все нажали готов
+					console.log('ready', data)
+					break
+				}
+			}
+		}
+	}, [])
+
+	console.log(players)
+
+	// Пригласить игрока
+	const handlerAddRival = (tg_id: number) => {
+		addRival({ global_ws, tg_id, game_id: game.id, place: placeRival })
+	}
+
+	// Добавлять место приглашенного игрока
+	const handlerShowModal = (place: number) => {
+		setPlaceRival(place)
+		setShowModal(true)
+	}
 
 	useEffect(() => {
 		if (cardsOnTable.length < 6) {
@@ -108,11 +185,20 @@ const Game: FC = () => {
 						[250, -600],
 						[200, poses[i]],
 						50,
-						'bottom'
+						'bottom',
+						false
 					)
 				}, (ii + i * 10) * 200)
 			}
 		}
+
+		let new_rivals = rivalsInfo
+		setTimeout(() => {
+			for (let i = 0; i < new_rivals.length; i++) {
+				new_rivals[i].numberOfCards += numCards[i]
+				setRivalsInfo(new_rivals)
+			}
+		}, 5000)
 	}
 
 	const beatCard = (cardIndex: number, cardPlaceIndex: number) => {
@@ -145,13 +231,14 @@ const Game: FC = () => {
 			})
 		}, 200)
 	}
+
 	const spawnCardWithCords = (
 		cardNum: object,
-		from: number[],
-		to: number[],
+		from: Array<number>,
+		to: Array<number>,
 		scale: number = 78,
-		pos: TPositionCard = 'top',
-		animation?: boolean
+		position: TPositionCard = 'top',
+		animation: boolean = false
 	) => {
 		setCurrentFlyingCards([
 			...currentFlyingCards,
@@ -162,7 +249,7 @@ const Game: FC = () => {
 				from={from}
 				to={to}
 				scale={scale}
-				position={pos}
+				position={position}
 				animation={animation}
 			/>
 		])
@@ -309,7 +396,8 @@ const Game: FC = () => {
 				>
 					{currentFlyingCards}
 				</div>
-				<div className={'flex flex-row items-center justify-between'}>
+
+				{/*<div className={'flex flex-row items-center justify-between'}>
 					<button onClick={fallCards}>DEV fall</button>
 					<button onClick={takeCards}>DEV take</button>
 					<button
@@ -333,13 +421,47 @@ const Game: FC = () => {
 					>
 						DEV rivals take
 					</button>
+				</div>*/}
+				<Rivals
+					rivals={players.filter(item => item.tg_id != tg_id)}
+					handlerShowModal={handlerShowModal}
+				/>
+				<div className='flex gap-base-x2 mt-base-x7'>
+					<Icon size={26} icon={game.currency} />
+					<Typography variant='h1'>{game.bet}</Typography>
 				</div>
-				<Rivals rivals={rivalsInfo} />
 				<Fall />
 				<Pack />
 
 				<Table cardsOnTable={cardsOnTable} />
 				<Fan cards={myCards} ready={buttonPress} />
+
+				<Modal
+					show={showModal}
+					handleClose={() => setShowModal(false)}
+					header={{ icon: 'swords', title: 'Соперники' }}
+					footer={<Button onClick={() => setShowModal(false)}>Готов</Button>}
+				>
+					<div className='flex flex-col gap-base-x4 w-full'>
+						{rivals &&
+							rivals.map(item => (
+								<button
+									onClick={() => handlerAddRival(item.tg_id)}
+									className='flex justify-between items-center gap-base-x3 pr-base-x2 w-full rounded-base-x1 bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.29)_100%)]'
+									key={item.tg_id}
+								>
+									<div className='flex items-center gap-base-x5'>
+										<img
+											src={item.photo_url ? item.photo_url : avatar}
+											alt=''
+											className='w-base-x7 h-base-x7 rounded-base-x1'
+										/>
+										<Typography variant='text'>{item.username}</Typography>
+									</div>
+								</button>
+							))}
+					</div>
+				</Modal>
 			</Layout>
 		</DragDropContext>
 	)

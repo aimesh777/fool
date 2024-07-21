@@ -1,7 +1,7 @@
-import { animated } from '@react-spring/web'
-import { FC } from 'react'
+import { animated } from "@react-spring/web";
+import { FC } from "react";
 
-import { ITypeCard } from '@/components/screens/game/game.interface'
+import { ITypeCard } from "@/components/screens/game/game.interface";
 
 interface IProps {
 	type: ITypeCard

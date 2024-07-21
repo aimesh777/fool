@@ -10,7 +10,7 @@ const Settings: FC = () => {
 		<Layout
 			header={{ icon: 'settings', title: 'Настройки' }}
 			footer={
-				<Button onClick={() => navigate(-1)} icon='back'>
+				<Button onClick={() => navigate('/menu')} icon='back'>
 					Назад
 				</Button>
 			}

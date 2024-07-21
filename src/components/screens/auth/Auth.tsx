@@ -1,13 +1,22 @@
-import { FC, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { FC, useState } from 'react'
 
 import { Button, Layout } from '@/components/ui'
 
-import { saveUser } from '@/services/auth/auth.helper'
+import { saveId } from '@/services/auth/auth.helper'
+
+import { useAuth } from './useAuth'
 
 const Auth: FC = () => {
-	const navigate = useNavigate()
-	useEffect(() => {
+	const [id, setId] = useState('')
+	const [newId, setNewId] = useState('')
+	const { player } = useAuth(newId)
+
+	const onSubmit = async () => {
+		await saveId(id)
+		setNewId(id)
+	}
+
+	/*useEffect(() => {
 		const script = document.createElement('script')
 		script.async = true
 		script.src = 'https://telegram.org/js/telegram-widget.js?22'
@@ -19,17 +28,21 @@ const Auth: FC = () => {
 		document.querySelector('.auth')?.appendChild(script)
 	}, [])
 
-	const onTelegramAuth = async user => {
-		navigate('/menu')
-		await saveUser('user')
-		console.log(user.first_name, user.last_name, user.id, user.username)
-	}
-
 	;(window as any).onTelegramAuth = onTelegramAuth
+	*/
 
 	return (
 		<Layout className='auth flex flex-col gap-base-x3 items-center justify-center'>
-			<Button className='border border-white' onClick={onTelegramAuth}>
+			<input
+				type='text'
+				onChange={e => setId(e.target.value)}
+				className='w-full h-base-x6 border border-white rounded-base-x1 outline-0 py-base-x5 px-base-x2'
+				style={{
+					background: 'none'
+				}}
+				placeholder='TD ID'
+			/>
+			<Button className='border border-white' onClick={onSubmit}>
 				Войти
 			</Button>
 		</Layout>

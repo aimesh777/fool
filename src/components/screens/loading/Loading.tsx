@@ -31,7 +31,7 @@ const Loading: FC = () => {
 				<span className='text-base-x2 text-center leading-none'>card game</span>
 			</div>
 			<div className='flex items-center gap-base-x3'>
-				<Icon size={38} icon='ton' />
+				<Icon size={38} icon='toncoin' />
 				<Typography variant='button'>TON</Typography>
 			</div>
 		</div>

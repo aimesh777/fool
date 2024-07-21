@@ -1,6 +1,6 @@
 import { Auth } from '@/components/screens'
 
-import { IRoute } from './navigation.types'
+import { IRoute } from '../navigation.types'
 
 export const unauthorizedRoutes: IRoute[] = [
 	{

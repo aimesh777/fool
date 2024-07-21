@@ -1,17 +1,24 @@
 import cn from 'clsx'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { Typography } from '@/components/ui'
 
-import { TCurrency } from '@/shared/types'
+import { TCurrency } from '@/shared/types/game.interface'
 
 interface IProps {
 	selectedBet: number
 	selectedCurrency: TCurrency
+	currentBalance: number
 	setSelectedBet: (value: number) => void
 }
 
-const Bet: FC<IProps> = ({ setSelectedBet, selectedBet, selectedCurrency }) => {
+const Bet: FC<IProps> = ({
+	setSelectedBet,
+	selectedBet,
+	selectedCurrency,
+	currentBalance
+}) => {
+	const [error, setError] = useState(false)
 	const [bet, setBet] = useState(7)
 	const [multiplierRate, setMultiplierRate] = useState('')
 
@@ -19,6 +26,12 @@ const Bet: FC<IProps> = ({ setSelectedBet, selectedBet, selectedCurrency }) => {
 	const multiplierRates = ['x10', 'x50', 'x100', 'x300', 'x500', 'x1000']
 
 	const changeBet = value => {
+		setError(false)
+
+		if (value > currentBalance) {
+			return setError(true)
+		}
+
 		setBet(value)
 		if (multiplierRate) {
 			setSelectedBet(value * parseInt(multiplierRate.split('x')[1]))
@@ -27,7 +40,21 @@ const Bet: FC<IProps> = ({ setSelectedBet, selectedBet, selectedCurrency }) => {
 		}
 	}
 
+	useEffect(() => {
+		if (bet > currentBalance) {
+			return setError(true)
+		} else {
+			setError(false)
+		}
+	}, [selectedCurrency])
+
 	const changeMultiplierRate = value => {
+		setError(false)
+
+		if (bet * value.split('x')[1] > currentBalance) {
+			return setError(true)
+		}
+
 		setMultiplierRate(value)
 
 		if (value) {
@@ -36,7 +63,11 @@ const Bet: FC<IProps> = ({ setSelectedBet, selectedBet, selectedCurrency }) => {
 	}
 
 	const clearBet = () => {
+		if (currentBalance >= bet) {
+			setError(false)
+		}
 		setSelectedBet(7)
+		setBet(7)
 		setMultiplierRate('')
 	}
 
@@ -86,6 +117,14 @@ const Bet: FC<IProps> = ({ setSelectedBet, selectedBet, selectedCurrency }) => {
 						</Typography>
 					</button>
 				</div>
+				{error && (
+					<Typography
+						variant='text'
+						className='text-center text-red opacity-90'
+					>
+						Не хватает баланса
+					</Typography>
+				)}
 				<Typography
 					variant='button'
 					className='text-center py-base-x1 uppercase'

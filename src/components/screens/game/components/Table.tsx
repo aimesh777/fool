@@ -1,10 +1,10 @@
-import { Droppable } from '@hello-pangea/dnd'
-import cn from 'clsx'
-import { FC } from 'react'
+import { Droppable } from "@hello-pangea/dnd";
+import cn from "clsx";
+import { FC } from "react";
 
-import { ITypeCard } from '@/components/screens/game/game.interface'
+import { ITypeCard } from "@/components/screens/game/game.interface";
 
-import Card from './Card'
+import Card from "./Card";
 
 interface ITable {
 	cardsOnTable: ITypeCard[][]
@@ -12,7 +12,7 @@ interface ITable {
 
 const Table: FC<ITable> = ({ cardsOnTable }) => {
 	return (
-		<div className='ml-5 pb-10 pr-0 flex flex-wrap items-center gap-base-x2 gap-y-base-x2 justify-center my-auto scale-[78%]'>
+		<div className='flex flex-wrap items-center p-0 gap-base-[3px] gap-1 justify-center my-auto scale-[77%]'>
 			{cardsOnTable.map((cardPlace, index) => (
 				<Droppable key={index} droppableId={`droppable-table-card-${index}`}>
 					{(provided, snapshot) => (

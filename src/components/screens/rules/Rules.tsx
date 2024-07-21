@@ -10,7 +10,7 @@ const Rules: FC = () => {
 		<Layout
 			header={{ icon: 'rules', title: 'Правила' }}
 			footer={
-				<Button onClick={() => navigate(-1)} icon='back'>
+				<Button onClick={() => navigate('/menu')} icon='back'>
 					Назад
 				</Button>
 			}
