@@ -51,6 +51,7 @@ const Bet: FC<IProps> = ({
 	const changeMultiplierRate = (value: string) => {
 		setError(false)
 
+		// @ts-ignore
 		if (bet * value.split('x')[1] > currentBalance) {
 			return setError(true)
 		}
@@ -58,6 +59,7 @@ const Bet: FC<IProps> = ({
 		setMultiplierRate(value)
 
 		if (value) {
+			// @ts-ignore
 			setSelectedBet(bet * value.split('x')[1])
 		}
 	}

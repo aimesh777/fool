@@ -20,6 +20,7 @@ const Menu: FC = () => {
 
 	const logout = async () => {
 		await deleteId()
+		// @ts-ignore
 		setPlayer(null)
 		navigate('/auth')
 	}

@@ -18,6 +18,7 @@ export const useProfile = () => {
 		() => AuthService.getPlayer(tg_id),
 		{
 			onSuccess: (data: IPlayer) => {
+				// @ts-ignore
 				setPlayer(data)
 			}
 		}

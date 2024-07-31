@@ -19,6 +19,7 @@ export const useAuth = (id: string) => {
 			enabled: !!id,
 			onSuccess: (data: IPlayer) => {
 				console.log('Player data:', data)
+				// @ts-ignore
 				setPlayer(data)
 				// navigate(0)
 			}

@@ -36,7 +36,7 @@ const DraggableCard: FC<IProps> = ({
 						  }deg) translateX(-40px) scale(1.2)`,
 					transformOrigin: '0% 100%'
 				}}
-				className='transition ease-in delay-[10] overflow-hidden rounded-[12px] shadow-2xl absolute pb-0 hover:!-translate-y-[65px] hover:!-translate-x-[55px] duration-[1500]'
+				className='transition ease-in delay-[10] overflow-hidden rounded-base-x1 shadow-2xl absolute pb-0 hover:!-translate-y-[65px] hover:!-translate-x-[55px] duration-[1500]'
 			>
 				<div
 					className='w-[120px] h-[167px] bg-no-repeat bg-cover'

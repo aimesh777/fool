@@ -40,7 +40,7 @@ const Table: FC<ITable> = ({ cardsOnTable, defendingPlayer }) => {
 										: 'transparent'
 								}}
 								className={cn(
-									'border border-dashed transition-colors w-[95px] h-[135px] rounded-[12px] absolute z-[-1]',
+									'border border-dashed transition-colors w-[95px] h-[135px] rounded-base-x1 absolute z-[-1]',
 									cardPlace[0]
 										? defendingPlayer === tg_id
 											? 'rotate-12'

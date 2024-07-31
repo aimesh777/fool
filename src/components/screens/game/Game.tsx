@@ -187,7 +187,6 @@ const Game: FC = () => {
 	}
 
 	const addCard = (index: number) => {
-		console.log(cards[index])
 		setCardsOnTable([...cardsOnTable.slice(0, -1), [cards[index]]])
 		setCards([...cards.slice(0, index), ...cards.slice(index + 1)])
 		playCard({ game_ws: game_ws.current, card: cards[index] })
