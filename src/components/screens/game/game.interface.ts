@@ -9,12 +9,10 @@ export interface ITypeCard {
 }
 
 export interface IRival {
-	tg_id?: number
-	username?: string
-	avatar?: string
-
-	name?: string
-	numberOfCards?: number
+	tg_id: number
+	username: string
+	avatar: string
+	countCards?: number
 }
 
 export interface IAddRivalProps {

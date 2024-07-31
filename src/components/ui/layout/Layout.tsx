@@ -1,8 +1,13 @@
 import cn from 'clsx'
-import { FC, PropsWithChildren } from 'react'
+import { FC, PropsWithChildren, useEffect } from 'react'
 
 import { Typography } from '@/components/ui'
 import Logo from '@/components/ui/Logo'
+
+import { IWebSocketResponse } from '@/shared/types/game.interface'
+
+import { useModal } from '@/providers/ModalContext'
+import { getWebSocket, initWebSocket } from '@/websocket'
 
 import Icon from '../icon/Icon'
 
@@ -15,6 +20,19 @@ const Layout: FC<PropsWithChildren<ILayout>> = ({
 	header,
 	footer
 }) => {
+	const { setVisible, setInfo } = useModal()
+	const socket = getWebSocket()
+
+	socket.onmessage = event => {
+		const message: { action: string; data: IWebSocketResponse } = JSON.parse(
+			event.data
+		)
+		if (message.action === 'invite') {
+			setInfo(message.data)
+			setVisible(true)
+		}
+	}
+
 	return (
 		<div className='flex flex-col justify-between items-center py-base-x4 px-[10%] h-full'>
 			<div className='flex flex-col items-center gap-base-x4 w-full h-full'>

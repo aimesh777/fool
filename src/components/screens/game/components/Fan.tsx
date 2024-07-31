@@ -1,37 +1,64 @@
 import { Draggable, Droppable } from '@hello-pangea/dnd'
 import { FC } from 'react'
 
-import { ITypeCard } from '@/components/screens/game/game.interface'
-import { Button } from '@/components/ui'
+import { Button, Icon } from '@/components/ui'
+
+import { getId } from '@/services/auth/auth.helper'
 
 import avatar from '@/assets/tapps.png'
 
 import DraggableCard from './DraggableCard'
 
 interface IProps {
-	cards: ITypeCard[]
-	ready: any
+	cards: string[]
+	onSubmit: () => void
+	buttonText: string
+	defendingPlayer: number
+	attackPlayer: number
 }
 
-const Fan: FC<IProps> = ({ cards, ready }) => {
+const Fan: FC<IProps> = ({
+	cards,
+	onSubmit,
+	buttonText,
+	defendingPlayer,
+	attackPlayer
+}) => {
+	const tg_id = Number(getId())
 	return (
 		<div className='relative w-full'>
 			<div className='relative bottom-[140px] flex justify-between'>
+				{defendingPlayer === tg_id && (
+					<Icon
+						size={25}
+						icon='defending'
+						className='absolute -top-base-x2 -left-base-x2 z-40'
+					/>
+				)}
+				{attackPlayer === tg_id && (
+					<Icon
+						size={25}
+						icon='attack'
+						className='absolute -top-base-x2 -left-base-x2 z-40'
+					/>
+				)}
 				<img
 					src={avatar}
 					alt=''
 					className='w-base-x7 h-base-x7 rounded-base-x1'
 				/>
-				<Button
-					className='rounded-full border border-white'
-					style={{
-						width: 64,
-						height: 64
-					}}
-					onClick={ready}
-				>
-					Готов
-				</Button>
+				{!!buttonText && (
+					<Button
+						className='rounded-full border border-white'
+						style={{
+							width: 64,
+							height: 64
+						}}
+						onClick={onSubmit}
+					>
+						{buttonText}
+					</Button>
+				)}
 			</div>
 			<div className='absolute bottom-[100px] left-[50%] flex flex-row items-center justify-center'>
 				{cards.map((card, index) => (
@@ -47,6 +74,7 @@ const Fan: FC<IProps> = ({ cards, ready }) => {
 								}}
 							>
 								<div ref={provided.innerRef} {...provided.droppableProps}>
+									{provided.placeholder}
 									<Draggable index={index} draggableId={'draggable-' + index}>
 										{(provided, snapshot) => (
 											<DraggableCard

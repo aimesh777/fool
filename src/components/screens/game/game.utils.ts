@@ -15,12 +15,18 @@ export const addRival = ({
 	global_ws.send(JSON.stringify(data))
 }
 
-export const playCard = ({ global_ws }) => {
+export const playCard = ({
+	game_ws,
+	card
+}: {
+	game_ws: WebSocket
+	card: string
+}) => {
 	let data = {
 		action: 'play_card',
-		card: 'Q_of_diamonds'
+		card: card
 	}
-	global_ws.send(JSON.stringify(data))
+	game_ws.send(JSON.stringify(data))
 }
 
 export const defendCard = ({ global_ws }) => {
@@ -31,11 +37,11 @@ export const defendCard = ({ global_ws }) => {
 	global_ws.send(JSON.stringify(data))
 }
 
-export const ready = ({ global_ws }) => {
+export const ready = game_ws => {
 	let data = {
 		action: 'ready'
 	}
-	global_ws.send(JSON.stringify(data))
+	game_ws.send(JSON.stringify(data))
 }
 
 export const beat = ({ global_ws }) => {

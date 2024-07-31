@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useSetAtom } from 'jotai'
+import { useAtom } from 'jotai'
 import { useMemo } from 'react'
 
 import { IPlayer } from '@/shared/types/auth.interface'
@@ -8,9 +8,9 @@ import { AuthService } from '@/services/auth/auth.service'
 
 import { playerAtom } from '@/store'
 
-export const useAuth = id => {
+export const useAuth = (id: string) => {
 	// const navigate = useNavigate()
-	const setPlayer = useSetAtom(playerAtom)
+	const [_, setPlayer] = useAtom(playerAtom)
 
 	const { data: player, isLoading: isPlayerLoading } = useQuery(
 		['getPlayer', id],

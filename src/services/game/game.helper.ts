@@ -12,3 +12,15 @@ export const getGame = () => {
 export const deleteGame = () => {
 	localStorage.removeItem('game')
 }
+export const savePlace = (place: number) => {
+	localStorage.removeItem('place')
+	localStorage.setItem('place', place.toString())
+}
+
+export const getPlace = () => {
+	return localStorage.getItem('place')
+}
+
+export const deletePlace = () => {
+	localStorage.removeItem('place')
+}

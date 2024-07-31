@@ -1,11 +1,10 @@
 import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { Button, Layout } from '@/components/ui'
+import { Button, Layout, Loader } from '@/components/ui'
 
-import { IPlayer } from '@/shared/types/auth.interface'
 import {
-	ICreateGameRequest,
+	IGameRequest,
 	TCurrency,
 	TTypeGame
 } from '@/shared/types/game.interface'
@@ -17,28 +16,40 @@ import { useCreateGame } from './useCreateGame'
 
 const CreateGame: FC = () => {
 	const navigate = useNavigate()
-	const { user } = useProfile()
-	const [info, setInfo] = useState<ICreateGameRequest>({
+	const { user, isUserLoading } = useProfile()
+	const [info, setInfo] = useState<IGameRequest>({
 		currency: 'foolcoin',
 		bet: 7,
 		num_players: 1,
-		game_type: 'flip_up'
+		type: 'flip_up'
 	})
-	const { createGame } = useCreateGame(info.bet, info.currency)
-	const [selectedRivals, setSelectedRivals] = useState<IPlayer[]>([])
+	const { createGame } = useCreateGame()
 	const onSubmit = () => {
 		const updatedInfo = { ...info, num_players: info.num_players + 1 }
 		createGame(updatedInfo)
 	}
 
-	const updateInfo = <K extends keyof ICreateGameRequest>(
+	const updateInfo = <K extends keyof IGameRequest>(
 		key: K,
-		value: ICreateGameRequest[K]
+		value: IGameRequest[K]
 	) => {
 		setInfo(prevInfo => ({
 			...prevInfo,
 			[key]: value
 		}))
+	}
+
+	if (isUserLoading) {
+		return (
+			<Layout
+				header={{
+					icon: 'fan',
+					title: 'Новая игра'
+				}}
+			>
+				<Loader />
+			</Layout>
+		)
 	}
 
 	return (
@@ -73,13 +84,11 @@ const CreateGame: FC = () => {
 				selectedCurrency={info.currency}
 			/>
 			<Type
-				selectedType={info.game_type}
-				setSelectedType={(value: TTypeGame) => updateInfo('game_type', value)}
+				selectedType={info.type}
+				setSelectedType={(value: TTypeGame) => updateInfo('type', value)}
 			/>
 			<Rivals
-				selectedRivals={selectedRivals}
 				selectedCountRivals={info.num_players}
-				setSelectedRivals={setSelectedRivals}
 				setSelectedCountRivals={(value: number) =>
 					updateInfo('num_players', value)
 				}

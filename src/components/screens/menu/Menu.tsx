@@ -1,4 +1,4 @@
-import { useSetAtom } from 'jotai'
+import { useAtom } from 'jotai'
 import { FC } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -16,7 +16,7 @@ const Menu: FC = () => {
 	const navigate = useNavigate()
 	const { user, isUserLoading } = useProfile()
 
-	const setPlayer = useSetAtom(playerAtom)
+	const [_, setPlayer] = useAtom(playerAtom)
 
 	const logout = async () => {
 		await deleteId()

@@ -29,7 +29,7 @@ const Friends: FC = () => {
 			<div className='flex flex-col gap-base-x6'>
 				{isFriendsLoading ? (
 					<Loader />
-				) : friends?.length > 0 ? (
+				) : friends && friends.length > 0 ? (
 					friends.map(item => (
 						<button
 							className='flex items-center gap-base-x5 pr-base-x2 w-full rounded-base-x1 bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(255,255,255,0.29)_100%)]'

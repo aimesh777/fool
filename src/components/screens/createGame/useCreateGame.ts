@@ -1,23 +1,21 @@
 import { useMutation } from '@tanstack/react-query'
-import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { ICreateGameRequest } from '@/shared/types/game.interface'
+import { IGameRequest } from '@/shared/types/game.interface'
 
+import { getId } from '@/services/auth/auth.helper'
 import { saveGame } from '@/services/game/game.helper'
 import { GameService } from '@/services/game/game.service'
 
-import { playerAtom } from '@/store'
-
-export const useCreateGame = (bet, currency) => {
+export const useCreateGame = () => {
 	const navigate = useNavigate()
-	const player = useAtomValue(playerAtom)
+	const tg_id = getId()
 
 	const { mutate: createGame, isLoading: isCreateGameLoading } = useMutation(
 		['createGame'],
-		(info: ICreateGameRequest) =>
-			GameService.createGame({ info: info, tg_id: player.tg_id }),
+		(info: IGameRequest) =>
+			GameService.createGame({ info: info, tg_id: tg_id }),
 		{
 			onSuccess: data => {
 				saveGame(data)

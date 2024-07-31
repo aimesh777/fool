@@ -1,10 +1,8 @@
-import { animated } from "@react-spring/web";
-import { FC } from "react";
-
-import { ITypeCard } from "@/components/screens/game/game.interface";
+import { animated } from '@react-spring/web'
+import { FC } from 'react'
 
 interface IProps {
-	type: ITypeCard
+	type: string
 	num: number
 	total: number
 	snapshot?: any
@@ -32,18 +30,20 @@ const DraggableCard: FC<IProps> = ({
 					transform: !snapshot.isDragging
 						? `rotate(${
 								(num - (total - 1) / 2) * angleOffset
-						  }deg) translateX(-60px) scale(1.1)`
+						  }deg) translateX(-40px) scale(1.1)`
 						: `rotate(${
 								((num - (total - 1) / 2) * angleOffset) / 2
-						  }deg) translateX(-60px) scale(1.2)`,
+						  }deg) translateX(-40px) scale(1.2)`,
 					transformOrigin: '0% 100%'
 				}}
 				className='transition ease-in delay-[10] overflow-hidden rounded-[12px] shadow-2xl absolute pb-0 hover:!-translate-y-[65px] hover:!-translate-x-[55px] duration-[1500]'
 			>
-				<div className='w-[120px] h-[150px] bg-white text-[#000]'>
-					Suit: {type.suit}
-					Value: {type.value}
-				</div>
+				<div
+					className='w-[120px] h-[167px] bg-no-repeat bg-cover'
+					style={{
+						backgroundImage: `url(./cards/${type}.svg)`
+					}}
+				/>
 			</animated.div>
 		</div>
 	)

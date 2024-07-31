@@ -10,6 +10,7 @@ interface IProps {
 	from: number[]
 	to: number[]
 	scale: number
+	type?: string
 	position?: TPositionCard
 	animation?: boolean
 }
@@ -18,6 +19,7 @@ const FlyingCard: FC<IProps> = ({
 	id,
 	onPause,
 	from,
+	type,
 	to,
 	scale,
 	position,
@@ -48,13 +50,7 @@ const FlyingCard: FC<IProps> = ({
 							: 'w-[93px] h-[130px] rounded-[12px] bg-white text-[#000]'
 					}
 				>
-					<Card
-						type={{
-							suit: 'spades',
-							value: 6
-						}}
-						position={position}
-					/>
+					<Card type={type} position={position} />
 				</div>
 			</animated.div>
 		</div>

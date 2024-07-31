@@ -22,7 +22,7 @@ export const initWebSocket = () => {
 	}
 
 	socket.onmessage = event => {
-		console.log('WebSocket', event)
+		console.log('WebSocket message:', event)
 	}
 }
 

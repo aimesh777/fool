@@ -8,7 +8,7 @@ import { TCurrency } from '@/shared/types/game.interface'
 
 interface IProps {
 	selectedCurrency: TCurrency
-	currency: ICurrency
+	currency?: ICurrency
 	setSelectedCurrency: (value: TCurrency) => void
 }
 const Currency: FC<IProps> = ({
@@ -37,7 +37,7 @@ const Currency: FC<IProps> = ({
 				{currency &&
 					Object.entries(currency).map(item => (
 						<button
-							onClick={() => setSelectedCurrency(item[0])}
+							onClick={() => setSelectedCurrency(item[0] as TCurrency)}
 							key={item[0]}
 							disabled={isSoon(item[0])}
 							className={cn(

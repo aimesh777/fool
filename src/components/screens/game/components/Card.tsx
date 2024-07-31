@@ -2,19 +2,15 @@ import cn from 'clsx'
 import { CSSProperties, FC } from 'react'
 
 import {
-	ITypeCard,
 	TPositionCard,
 	TSizeCard,
 	cardSizeToDimensions
 } from '@/components/screens/game/game.interface'
 
-import QC from '@/assets/cards/QC.svg'
-import cover from '@/assets/cards/cover.svg'
-
 interface IProps {
 	size?: TSizeCard
 	position?: TPositionCard
-	type?: ITypeCard
+	type?: string
 	className?: string
 	style?: CSSProperties
 }
@@ -22,8 +18,9 @@ interface IProps {
 const Card: FC<IProps> = ({
 	style,
 	className,
-	size = 'normal',
-	position = 'top'
+	type,
+	position = 'top',
+	size = 'normal'
 }) => {
 	return (
 		<div
@@ -36,16 +33,11 @@ const Card: FC<IProps> = ({
 					width: cardSizeToDimensions[size].width,
 					height: cardSizeToDimensions[size].height,
 					backgroundImage:
-						position === 'bottom' ? `url(${cover})` : `url(${QC})`
+						position === 'bottom'
+							? `url(/cards/cover.svg)`
+							: `url(/cards/${type}.svg)`
 				}}
-			>
-				{/*{position === 'top' && (
-					<div>
-						suit: {type?.suit} <br />
-						value: {type?.value}
-					</div>
-				)}*/}
-			</div>
+			/>
 		</div>
 	)
 }

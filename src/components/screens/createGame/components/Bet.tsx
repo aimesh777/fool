@@ -8,7 +8,7 @@ import { TCurrency } from '@/shared/types/game.interface'
 interface IProps {
 	selectedBet: number
 	selectedCurrency: TCurrency
-	currentBalance: number
+	currentBalance?: number
 	setSelectedBet: (value: number) => void
 }
 
@@ -25,7 +25,7 @@ const Bet: FC<IProps> = ({
 	const bets = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 	const multiplierRates = ['x10', 'x50', 'x100', 'x300', 'x500', 'x1000']
 
-	const changeBet = value => {
+	const changeBet = (value: number) => {
 		setError(false)
 
 		if (value > currentBalance) {
@@ -48,7 +48,7 @@ const Bet: FC<IProps> = ({
 		}
 	}, [selectedCurrency])
 
-	const changeMultiplierRate = value => {
+	const changeMultiplierRate = (value: string) => {
 		setError(false)
 
 		if (bet * value.split('x')[1] > currentBalance) {
